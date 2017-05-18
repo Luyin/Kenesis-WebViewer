@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<HTML>
+	<head>
+		<title>Ajax Test</title>
+	</head>
+	<body>
+		<div id="content">
+		</div>
+		<script type="text/javascript">
+			var http = new XMLHttpRequest();
+			var ajax = new XMLHttpRequest();
+
+			var data = {
+				userid: 'guest',
+				password: 'guest'
+			};
+
+			http.open("POST", "http://192.168.21.8/api/auth", true);
+			ajax.open("GET", "http://192.168.21.8/api/v1/user/guest", true);
+			http.setRequestHeader("Content-type", "application/json");
+			http.onload = function(){
+				var div = document.getElementById('content');
+				var token = JSON.parse(this.response).token;
+
+				ajax.setRequestHeader("Content-type", "application/json");
+				ajax.setRequestHeader("Authorization", "Bearer " + token);
+
+				ajax.onload = function()
+				{
+					div.innerText = this.response;
+				}
+
+				ajax.send();
+			};
+
+			http.send(JSON.stringify(data));
+
+
+
+
+		</script>
+	</body>
+</HTML>

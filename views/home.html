@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Kenesis</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<link href="../external-lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+		<link href="../external-lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+		<link href="../styles/home.css" rel="stylesheet" type="text/css">
+		<link href="../styles/filemanager.css" rel="stylesheet" type="text/css">
+
+		<!-- dash js player -->
+		<style>
+		    video {
+		       width: 640px;
+		       height: 360px;
+		    }
+		</style>
+	</head>
+	<body>
+    <nav class="navbar navbar-default navbar-fixed-top topbar">
+		<div class="container-fluid">
+
+			<div class="navbar-header">
+
+				<a href="#" class="navbar-brand">
+					<span class="visible-xs">KL</span>
+					<span class="hidden-xs">Kaitani Labs</span>
+				</a>
+
+				<p class="navbar-text">
+					<a href="#" class="sidebar-toggle">
+                        <i class="fa fa-bars"></i>
+                    </a>
+				</p>
+
+			</div>
+
+			<div class="navbar-collapse collapse" id="navbar-collapse-main">
+
+				<ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <button class="navbar-btn">
+                            <i class="fa fa-bell"></i>
+                        </button>
+                    </li>
+                    
+					<li class="dropdown">
+						<button class="navbar-btn" data-toggle="dropdown">
+							<img src="http://lorempixel.com/30/30/people" class="img-circle">
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="#">Account</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li class="nav-divider"></li>
+							<li><a href="#">Logout</a></li>
+						</ul>
+					</li>
+
+				</ul>
+
+			</div>
+		</div>
+	</nav>
+	
+	<article class="wrapper">
+	    
+	    <aside class="sidebar">
+	        <ul class="sidebar-nav">
+			    <li class="active"><a href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+			    <li><a href="#configuration" data-toggle="tab"><i class="fa fa-cogs"></i> <span>Configuration</span></a></li>
+			    <li><a href="#users" data-toggle="tab"><i class="fa fa-users"></i> <span>Users</span></a></li>
+			    <li><a href="#mail" data-toggle="tab"><i class="fa fa-envelope"></i> <span>Mail</span></a></li>
+		    </ul>
+	    </aside>
+	    
+	    <section class="main">
+	        
+	        <section class="tab-content">
+	           <!-- Center View -->
+	           <section class="tab-pane active fade in content" id="dashboard">
+	               
+	                <div class="row">
+	                   
+	                   <div class="col-xs-12 col-sm-8">
+	                       <div class="panel panel-default">
+	                           <div class="panel-heading">
+	                               File Manager
+	                           </div>
+	                           <div class="panel-body">
+	                               <!-- File Manager - START -->
+									<div class="container pb-filemng-template">
+									    <div class="row">
+									        <div class="col-md-11 col-md-offset-0">
+									            <nav class="navbar navbar-default pb-filemng-navbar">
+									                <div class="container-fluid">
+									                    <!-- Navigation -->
+									                    <div class="navbar-header">
+									                        <button type="button" class="pull-left navbar-toggle collapsed treeview-toggle-btn" data-toggle="collapse" data-target="#treeview-toggle" aria-expanded="false">
+									                            <span class="sr-only">Toggle navigation</span>
+									                            <span class="icon-bar"></span>
+									                            <span class="icon-bar"></span>
+									                            <span class="icon-bar"></span>
+									                        </button>
+
+									                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#options" aria-expanded="false">
+									                            <span class="sr-only">Toggle navigation</span>
+									                            <span class="fa fa-gears"></span>
+									                        </button>
+
+									                        <!-- Search button -->
+									                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#pb-filemng-navigation" aria-expanded="false">
+									                            <span class="sr-only">Toggle navigation</span>
+									                            <span class="fa fa-share"></span>
+									                        </button>
+									                    </div>
+
+									                    <ul class="collapse navbar-collapse nav navbar-nav navbar-right" id="options">
+									                        <li><a href="#"><span class="fa fa-crosshairs fa-lg"></span></a></li>
+									                        <li><a href="#"><span class="fa fa-ellipsis-v fa-lg"></span></a></li>
+									                        <li><a href="#"><span class="fa fa-lg fa-server"></span></a></li>
+									                        <li><a href="#"><span class="fa fa-lg fa-minus"></span></a></li>
+									                        <li><a href="#"><span class="fa fa-lg fa-window-maximize"></span></a></li>
+									                        <li><a href="#"><span class="fa fa-lg fa-times"></span></a></li>
+									                    </ul>
+
+
+									                    <!-- Collect the nav links, forms, and other content for toggling -->
+									                    <div class="collapse navbar-collapse" id="pb-filemng-navigation">
+									                        <ul class="nav navbar-nav">
+									                            <li><a href="#"><span class="fa fa-chevron-left fa-lg" onclick="preViewDirectory()"></span></a></li>
+									                            <li><a href="#"><span class="fa fa-chevron-right fa-lg" onclick="nextViewDirectory()"></span></a></li>
+									                            <li class="pb-filemng-active"><a href="#"><span class="fa fa-file fa-lg"></span></a></li>
+									                        </ul>
+									                    </div>
+									                    <!-- /.navbar-collapse -->
+
+									                </div>
+									                <!-- /.container-fluid -->
+									            </nav>
+									            <div class="panel panel-default">
+									                <div class="panel-body pb-filemng-panel-body">
+									                    <div class="row">
+									                        <div class="col-sm-3 col-md-4 pb-filemng-template-treeview">
+									                            <div class="collapse navbar-collapse" id="treeview-toggle">
+									                                <div id="treeview">
+									                                </div>
+									                            </div>
+									                        </div>
+									                        <div class="col-sm-9 col-md-8 pb-filemng-template-body">
+									                        </div>
+									                    </div>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									</div>
+									<!-- File Manager - END -->
+	                           </div>
+	                       </div>
+	                   </div>
+	                   
+	               </div>
+	               
+	           </section>
+	           <!-- End of Center View -->
+	           
+	           <section class="tab-pane fade" id="configuration">
+	               <nav class="subbar">
+			            <ul class="nav nav-tabs">
+				            <li class="active"><a href="#access" data-toggle="tab"><i class="fa fa-code"></i> <span>System</span></a></li>
+				            <li><a href="#roles" data-toggle="tab"><i class="fa fa-user"></i> <span>Roles</span></a></li>
+			            </ul>
+		            </nav>
+		            
+		            <section class="tab-content content">
+		                
+		                <section class="tab-pane active fade in" id="access">
+		                    
+                            <div class="row">
+                                <div class="col-xs-12">
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="col-xs-12 col-sm-4">
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="col-xs-12 col-sm-4">
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="col-xs-12 col-sm-4">
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                            </div>
+                            </div>
+		                    
+		                </section>
+		                
+		                <section class="tab-pane fade" id="roles">
+		                    
+		                    <div class="row">
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="hidden-xs col-sm-4 col-md-3">
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                                
+	                                <div class="panel panel-default">
+	                                    <div class="panel-heading">
+	                                        Something
+	                                    </div>
+	                                    <div class="panel-body">
+	                                        <br/><br/><br/>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                       </div>
+		                </section>
+		                
+		            </section>
+		            
+	           </section>
+	           
+	           <section class="tab-pane fade" id="users">
+	               
+	           </section>
+	           
+	           <section class="tab-pane fade" id="mail">
+	               
+	           </section>
+	           
+	        </section>
+	    </section>
+
+		<!-- Encode Modal -->
+		<div class="modal fade" id="EncodeModal" role="dialog">
+			<div class="modal-dialog">
+			<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Request Transcoding</h4>
+					</div>
+					<div class="modal-body">
+						<p>Do you want to transcode this media?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary">Transcode</button>
+						<button type="button" class="btn btn-danger">Cancel</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Encode Modal -- END -->
+
+		<!-- Player Modal -->
+		<div class="modal fade" id="PlayerModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+	      		<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">MPEG-DASH Player</h4>
+				</div>
+				<div class="modal-body">
+					<p><video id="videoPlayer" controls></video></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger">Delete</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Player Modal End -->
+
+	</article>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	    <script src="../external-lib/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Jquery Shield-UI it's using for File Manager -->
+		<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+
+	    <!-- Include File Manager Data -->
+	    <script type="text/javascript" src="http://www.prepbootstrap.com/Content/data/fileManagerData.js"></script>
+
+	    <!-- Include dash.js player -->
+	    <script src="../scripts/dash.all.min.js"></script>
+	    
+
+	    <script type="text/javascript">
+	    	
+
+			$(document).on("click",".sidebar-toggle",function(){
+			    $(".wrapper").toggleClass("toggled");
+			});
+
+
+
+
+			/* File Manager -- START */
+			var HomePath = null;
+	    	var PathList = [];
+	    	var IndexOfCurrentPaths = null;
+	    	var player = dashjs.MediaPlayer().create();
+	    	var clickedFileID = null;
+	    	var clickedRelativePath = null;
+	    	var statusIntervalPromise = null;
+
+	    	// Initialization
+			(function(){
+				$.ajax({
+		            url:'/api/v1/user/admin',
+		            dataType:'json',
+		            success:function(reponse){
+		            	HomePath = reponse.homelocation;
+		            }
+		        })
+			})();
+
+		    $(function () {
+		        $("#treeview").shieldTreeView({
+		            dataSource: dataSrc
+		        });
+
+		        var relativePath = '/';
+		        viewDirectory(relativePath);
+		        PathList.push(relativePath);
+		        IndexOfCurrentPaths = 0;
+		    })
+
+		    function viewDirectory(relativePath)
+		    {
+		        $.ajax({
+		            url: '/api/v1/files/admin?location=' + relativePath,
+		            dataType:'json',
+		            success:function(folderData){
+				        for (var key in folderData) {
+				        	var absPath = folderData[key].path;
+				        	var splitedStr = absPath.split('/');
+				        	var filename = splitedStr[splitedStr.length-1];
+
+				        	if(filename[0] !== '.')
+				        	{
+				            	var div = document.createElement('div');
+				            	div.setAttribute('class', 'col-xs-6 col-sm-6 col-md-3 pb-filemng-body-folders');
+				            	
+				            	var img = document.createElement('img');
+				            	img.setAttribute('class', 'img-responsive');
+				            	img.setAttribute('id', folderData[key].fileid);
+				            	img.setAttribute('absolutepath', absPath);
+				            	img.setAttribute('src', '/htdocs/images/filemanager/folder.png');
+
+				            	var br = document.createElement('br');
+
+				            	var p = document.createElement('p');
+				            	p.setAttribute('class', 'pb-filemng-paragraphs');
+				            	p.innerText = filename;
+
+				            	div.appendChild(img);
+				            	div.appendChild(br);
+				            	div.appendChild(p);
+
+				            	$(".pb-filemng-template-body").append(div);
+				        	}
+				        }
+		            }
+		        })
+		    }
+
+		    function preViewDirectory()
+		    {
+		    	if(PathList.length > 1 && IndexOfCurrentPaths > 0)
+		    	{
+		    		$(".pb-filemng-template-body").empty();
+
+		    		viewDirectory(PathList[--IndexOfCurrentPaths]);
+		    	}
+		    }
+
+		    function nextViewDirectory()
+		    {
+		    	if(PathList.length > 1 && PathList.length > (IndexOfCurrentPaths+1))
+		    	{
+		    		$(".pb-filemng-template-body").empty();
+		    		viewDirectory(PathList[++IndexOfCurrentPaths]);
+		    	}
+		    }
+
+		    function cancelEncode(fileid)
+		    {
+				$.ajax({
+		            url: '/api/v1/encode/' + clickedFileID,
+		            method : 'DELETE'
+		        })
+		    }
+
+		    function requestEncode(relativePath, successCallback)
+		    {
+	    		$.ajax({
+		            url: '/api/v1/encode?location=' + relativePath,
+		            method : 'POST',
+		            success : successCallback
+		        })
+		    }
+
+		    function getStatusOfTranscode(fileid, successCallback)
+		    {
+			    $.ajax({
+		            url: '/api/v1/encode/' + fileid,
+		            dataType:'json',
+		            method : 'GET',
+		            headers: {
+        				"Cache-Control":"no-cache"
+    				},
+		            success: successCallback
+		        })
+		    }
+
+		    function StartMonitoringStatusOfTrancode()
+		    {
+		    	statusIntervalPromise = setInterval(function(){
+  					getStatusOfTranscode(clickedFileID, 
+  						function(response){
+  							$('#EncodeModal .modal-body').empty();
+
+  							var Element = document.createElement('p');
+  							Element.innerText = response.status + " : " + response.progress;
+
+
+  							$('#EncodeModal .modal-body').append(Element);
+  						
+	  						if(response.progress === 100 && response.status === "Complete")
+  							{
+  								StopMonitoringStatusOftrancode();
+  							}
+  						});
+  				}, 1000);
+		    }
+
+		    function StopMonitoringStatusOftrancode()
+		    {
+		    	clearInterval(statusIntervalPromise);
+		    }
+
+
+		    //EncodeModal is shwoing
+		    $('#EncodeModal').on('show.bs.modal', function (e) {
+		    	
+			});
+
+			$('#EncodeModal').on('hide.bs.modal', function (e) {
+  				clearInterval(statusIntervalPromise);
+			});
+
+			$('#EncodeModal .modal-footer').on("click" , function(event){
+				if(event.target.className === "btn btn-primary")
+				{
+					requestEncode(clickedRelativePath, function(response){
+						clickedFileID = response;
+						StartMonitoringStatusOfTrancode();
+					});
+				}
+				else if(event.target.className === "btn btn-danger")
+				{
+					cancelEncode(clickedFileID);
+				}
+			});
+
+			$('#PlayerModal .modal-footer').on("click" , function(event){
+				if(event.target.className === "btn btn-danger")
+				{
+					cancelEncode(clickedFileID);
+				}
+			});
+
+		    $(".pb-filemng-template-body").on("click",'img',function(event){
+				var relativePath = event.target.attributes.absolutepath.value.split(HomePath + '/')[1];
+				clickedRelativePath = relativePath;
+
+				if(relativePath.includes('.mp4'))
+				{
+					$.ajax({
+			            url: '/api/v1/files/admin?location=' + relativePath,
+			            dataType:'json',
+			            method : 'GET',
+			            success:function(filinfo){
+			            	clickedFileID = filinfo[0].fileid;
+
+			            	if(clickedFileID === String(-1))
+			            	{
+			        			$('#EncodeModal').modal('show');
+			            	}
+			            	else
+			            	{
+			            		getStatusOfTranscode(clickedFileID, function(response){
+			            			if(response.progress === 100 && response.status == "Complete")
+			            			{
+			            				$('#PlayerModal').modal('show');
+										var url = '../../media/' + clickedFileID + '/segmented/media.mpd';
+				                		player.initialize(document.querySelector("#videoPlayer"), url, true);		
+			            			}
+			            			else
+			            			{
+			            				$('#EncodeModal').modal('show');
+			            				StartMonitoringStatusOfTrancode();
+			            			}
+			            		});
+			            	}
+			            }
+			        })
+				}
+				else
+				{
+					$(".pb-filemng-template-body").empty();
+
+					PathList = PathList.splice(0, IndexOfCurrentPaths + 1);
+					PathList.push(relativePath);
+					IndexOfCurrentPaths++;
+					viewDirectory(relativePath);
+				}
+			});
+			/* File Manager -- END */
+	    </script>
+	</body>
+</html>
