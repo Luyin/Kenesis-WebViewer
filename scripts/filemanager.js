@@ -23,8 +23,15 @@ var statusIntervalPromise = null;
         }
     });
 
-	player.initialize(document.querySelector("#videoPlayer"), '', false);
-    console.log("Dash.js Player " + player.getVersion() + " initialized");
+	switch (getBrowser())
+	{
+		case "CHROME":
+		case "EDGE":
+		case "FIREFOX":
+            player.initialize(document.querySelector("#videoPlayer"), '', false);
+            console.log("Dash.js Player " + player.getVersion() + " initialized");
+			break;
+	}
 })();
 
 $(function () {
@@ -33,6 +40,18 @@ $(function () {
     PathList.push(relativePath);
     IndexOfCurrentPaths = 0;
 });
+
+function getBrowser() {
+    var UserAgent = window.navigator.userAgent;
+    var Browsers = {IE: /msie|trident/i, EDGE: /chrome.+? edge/i , CHROME: /chrome|crios|crmo/i, FIREFOX: /firefox|iceweasel/i, SAFARI: /safari/i };
+
+    for(var key in Browsers) {
+        if (Browsers[key].test(UserAgent)) {
+            return String(key);
+        }
+    }
+    return 'unknown';
+}
 
 function viewDirectory(relativePath)
 {
@@ -44,6 +63,7 @@ function viewDirectory(relativePath)
         headers : {Authorization : "Bearer " + sessionStorage.getItem("kenesis")},
         success:function(folderData){
             hideLoadingIndicator($("#file-explorer")[0]);
+            var docFrag = document.createDocumentFragment();
 
 	        for (var key in folderData) {
 	        	var absPath = folderData[key].path;
@@ -99,9 +119,10 @@ function viewDirectory(relativePath)
 	            	div.appendChild(br);
 	            	div.appendChild(p);
 
-	            	$(".pb-filemng-template-body").append(div);
+                    docFrag.appendChild(div);
 	        	}
 	        }
+            $(".pb-filemng-template-body").append(docFrag);
         }
     })
 }
@@ -125,7 +146,7 @@ function nextViewDirectory()
 	}
 }
 
-function cancelEncode(fileid)
+function cancelEncode()
 {
 	$.ajax({
         url: '/api/v1/transcode/' + clickedFileID,
@@ -160,17 +181,18 @@ function getStatusOfTranscode(fileid, successCallback)
 
 function StartMonitoringStatusOfTrancode()
 {
+    var EncodeModalTitleElem = $('#EncodeModal .modal-title');
+    var EncodeModalBodyElem = $('#EncodeModal .modal-body');
 	statusIntervalPromise = setInterval(function(){
 			getStatusOfTranscode(clickedFileID, 
 				function(response){
-					$('#EncodeModal .modal-title')[0].innerText = 'Transcoding...';
-
-					$('#EncodeModal .modal-body').empty();
+                    EncodeModalTitleElem[0].innerText = 'Transcoding...';
+                    EncodeModalBodyElem.empty();
 
 					var Element = document.createElement('p');
 					Element.innerText = response.status + " : " + response.progress + "%";
 
-					$('#EncodeModal .modal-body').append(Element);
+                    EncodeModalBodyElem.append(Element);
 				
 					if(response.progress === 100 && response.status === "Complete")
 					{
@@ -186,11 +208,30 @@ function StopMonitoringStatusOftrancode()
 	clearInterval(statusIntervalPromise);
 }
 
-function ChangePlayerURL(url)
+function ChangePlayerURL(clickedFileID)
 {
-	player.attachView(document.querySelector("#videoPlayer"));
-	player.attachSource(url);
-	player.setAutoPlay(false);
+    switch (getBrowser())
+    {
+        case "CHROME":
+        case "EDGE":
+        case "FIREFOX":
+            var url = '../../media/' + clickedFileID + '/segmented/mpd/media.mpd';
+            player.attachView(document.querySelector("#videoPlayer"));
+            player.attachSource(url);
+            player.setAutoPlay(false);
+            break;
+		case "IE":
+            var url = '../../media/' + clickedFileID + '/transcoded/media.mp4';
+            var video = document.querySelector("#videoPlayer");
+            video.setAttribute("src", url);
+			break;
+		case "SAFARI":
+            var url = '../../media/' + clickedFileID + '/segmented/m3u8/media.m3u8';
+            var video = document.querySelector("#videoPlayer");
+            video.setAttribute("src", url);
+			break;
+    }
+
 }
 
 function resetEncodeModalInnerText()
@@ -206,15 +247,19 @@ function resetEncodeModalInnerText()
 
 function showLoadingIndicator(parentElement)
 {
-    var spinner = new Spinner().spin();
-    parentElement.appendChild(spinner.el);
+    if(!parentElement.contains($(".spinner")[0]))
+    {
+        var spinner = new Spinner().spin();
+        parentElement.appendChild(spinner.el);
+    }
 }
 
 function hideLoadingIndicator(parentElement)
 {
-	if($(".spinner") === null) return;
-
-	parentElement.removeChild($(".spinner")[0]);
+	if(parentElement.contains($(".spinner")[0]))
+	{
+        parentElement.removeChild($(".spinner")[0]);
+	}
 }
 
 //EncodeModal is shwoing
@@ -228,7 +273,20 @@ $('#EncodeModal').on('hide.bs.modal', function (e) {
 });
 
 $('#PlayerModal').on('hide.bs.modal', function (e) {
-	player.reset();
+    switch (getBrowser())
+    {
+        case "CHROME":
+        case "EDGE":
+        case "FIREFOX":
+            player.reset();
+            break;
+        case "IE":
+        case "SAFARI":
+            var video = document.querySelector("#videoPlayer");
+            video.pause();
+            break;
+    }
+
 });
 
 $('#EncodeModal .modal-footer').on("click" , function(event){
@@ -287,8 +345,7 @@ $(".pb-filemng-template-body").on("click",'img',function(event){
                             {
                             	hideLoadingIndicator($("#PlayerModal .modal-content")[0]);
                                 $('#PlayerModal').modal('show');
-                                var url = '../../media/' + clickedFileID + '/segmented/media.mpd';
-                                ChangePlayerURL(url);
+                                ChangePlayerURL(clickedFileID);
                             }
                             else
                             {
